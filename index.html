@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>地图数据可视化</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./fonts/icomoon.css">
+    <!-- <script src="https://cdn.publicfile.org/echarts/4.3.0/echarts.min.js"></script> -->
+    <!-- <style>
+        .el-carousel__item h3 {
+            /* color: #475669; */
+            font-size: 18px;
+            opacity: 0.75;
+            line-height: 300px;
+            margin: 0;
+        }
+
+        .el-carousel {
+            width: 600px;
+            /* height: 470px !important; */
+        }
+
+        .el-carousel__item {
+            height: 470px;
+        }
+
+        .el-carousel__item img {
+            margin-left: 90px;
+            width: 400px;
+            height: 400px;
+        }
+
+        /* .el-carousel__item:nth-child(2n) {
+            background-color: #99a9bf;
+        }
+
+        .el-carousel__item:nth-child(2n+1) {
+            background-color: #d3dce6;
+        } */
+    </style> -->
+</head>
+
+<body>
+    <div class="viewport">
+        <div class="column">
+            <!--概览-->
+            <div class="overview panel">
+                <div class="inner">
+                    <div class="item">
+                        <h4></h4>
+                        <span>
+                            <i class="icon-dot" style="color: #006cff"></i>
+                            家客一线
+                        </span>
+                    </div>
+                    <div class="item">
+                        <h4></h4>
+                        <span>
+                            <i class="icon-dot" style="color: #6acca3"></i>
+                            集客一线
+                        </span>
+                    </div>
+                    <div class="item">
+                        <h4></h4>
+                        <span>
+                            <i class="icon-dot" style="color: #6acca3"></i>
+                            抢修支撑
+                        </span>
+                    </div>
+                    <div class="item">
+                        <h4></h4>
+                        <span>
+                            <i class="icon-dot" style="color: #ed3f35"></i>
+                            后台人员
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!--证件情况-->
+            <div class="monitor panel">
+                <div class="inner">
+                    <div class="tabs">
+                        <h3>证件情况</h3>
+                    </div>
+                    <div class="content" style="display: block;">
+                        <div class="head">
+                            <span class="col">区县</span>
+                            <span class="col" style="margin-left: 40px;">智慧工程师</span>
+                            <span class="col">电工证</span>
+                            <span class="col" style="margin-left: 40px;width: 50px;">登高证</span>
+                        </div>
+                        <div class="row cs">
+                            <span class="col">合计</span>
+                            <span class="col" style="margin-left: 75px;"></span>
+                            <span class="col"></span>
+                            <span class="col" style="margin-left: 50px;width: 50px;"></span>
+                        </div>
+                        <div class="marquee-view" style="margin-top: 32px;">
+                            <div class="marquee">
+                                <!-- <div class="row">
+                                    <span class="col">江干</span>
+                                    <span class="col zh">12</span>
+                                    <span class="col dg">52</span>
+                                    <span class="col gd">42</span>
+                                    <span class="icon-dot"></span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--人均装机-->
+            <div class="point panel">
+                <div class="inner">
+                    <h3>人均装机</h3>
+                    <div class="chart">
+                        <div class="pie"></div>
+                        <div class="data">
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    <i class="icon-dot" style="color: #ed3f35"></i>
+                                    当月装机
+                                </span>
+                            </div>
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    <i class="icon-dot" style="color: #eacf19"></i>
+                                    市人均装机
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <!-- 地图 -->
+            <div class="map">
+                <div class="chart">
+                    <div id="app">
+                        <div id="imageBack">
+                            <div class="ditu" style="  height: 70px;width: 600px;text-align: center;line-height: 70px;font-size: 30px;color: #ffffff;">
+                                <span></span></div>
+                            <div style="z-index: 2;height: 150px;width: 150px;position:absolute;left: 30px;">
+                                <h4 class="zt">登高证：<span></span></h4>
+                                <h4 class="zt">智慧工程师：<span></span></h4>
+                            </div>
+                            <div style="z-index: 2;height: 150px;width: 150px;position:absolute;right:20px;top:350px">
+                                <h4 class="zt">电工证：<span></span></h4>
+                                <h4 class="zt">公司自有车辆：<span></span></h4>
+                            </div>
+                            <img src="./image/1.png" id="testImage" style="width: 400px;height: 400px;margin-left: 100px;">
+                        </div>
+                        <!-- <el-carousel indicator-position="outside" height="500px">
+                            <el-carousel-item v-for="item in data" :key="item.id" :height=500>
+                                <div class="ditu"
+                                    style="  height: 70px;width: 600px;text-align: center;line-height: 70px;font-size: 30px;color: #ffffff;">
+                                    {{item.name}}</div>
+                                <div style="z-index: 2;height: 150px;width: 130px;position:absolute;">
+                                    <h4 class="zt">智慧工程师：{{item.gongchen}}</h4>
+                                    <h4 class="zt">登高证：{{item.dengg}}</h4>
+                                </div>
+                                <div
+                                    style="z-index: 2;height: 150px;width: 130px;position:absolute;right:20px;bottom: 0;">
+                                    <h4 class="zt">电工证：{{item.diangong}}</h4>
+                                    <h4 class="zt">公司自有车辆：{{item.gscl}}</h4>
+                                </div>
+                                <img :src=require("item.imgSrc") alt="">
+                            </el-carousel-item>
+                        </el-carousel> -->
+                    </div>
+                </div>
+            </div>
+            <!-- 人均劳效 -->
+            <div class="users panel">
+                <div class="inner">
+                    <h3>人均劳效</h3>
+                    <div class="chart">
+                        <div class="bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <!-- 新进 -->
+            <div class="order panel">
+                <div class="inner">
+                    <!-- 筛选 -->
+                    <div class="filter">
+                        <a href="javascript:;" data-key="day365" class="active">365天</a>
+                        <a href="javascript:;" data-key="day90">90天</a>
+                        <a href="javascript:;" data-key="day30">30天</a>
+                        <a href="javascript:;" data-key="day1">24小时</a>
+                    </div>
+                    <!-- 数据 -->
+                    <div class="data">
+                        <div class="item">
+                            <h4></h4>
+                            <span>
+                                <i class="icon-dot" style="color: #ed3f35;"></i>
+                                新进人数
+                            </span>
+                        </div>
+                        <div class="item">
+                            <h4></h4>
+                            <span>
+                                <i class="icon-dot" style="color: #eacf19;"></i>
+                                离职人数
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 物品 -->
+            <div class="wrap">
+                <div class="channel panel">
+                    <div class="inner">
+                        <h3>工器具</h3>
+                        <div class="data">
+                            <div class="item">
+                                <h4> </h4>
+                                <span>
+                                    熔接机
+                                </span>
+                            </div>
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    OTDR
+                                </span>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    综合测试仪
+                                </span>
+                            </div>
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    标签打印机
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="channel panel">
+                    <div class="inner">
+                        <h3>劳保</h3>
+                        <div class="data">
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    安全帽
+                                </span>
+                            </div>
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    警报器
+                                </span>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    安全带
+                                </span>
+                            </div>
+                            <div class="item">
+                                <h4></h4>
+                                <span>
+                                    脚扣
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="quarter panel">   
+                    <div class="inner">
+                        <h3>一季度销售进度</h3>
+                        <div class="chart">
+                            <div class="box">
+                                <div class="gauge"></div>
+                                <div class="label">75<small> %</small></div>
+                            </div>
+                            <div class="data">
+                                <div class="item">
+                                    <h4>1,321</h4>
+                                    <span>
+                                        <i class="icon-dot" style="color: #6acca3"></i>
+                                        销售额(万元)
+                                    </span>
+                                </div>
+                                <div class="item">
+                                    <h4>150%</h4>
+                                    <span>
+                                        <i class="icon-dot" style="color: #ed3f35"></i>
+                                        同比增长
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <!-- 销售 -->
+            <div class="sales panel">
+                <div class="inner">
+                    <div class="caption">
+                        <h3>车辆费用</h3>
+                        <a href="javascript:;" class="active" data-type="year">年</a>
+                        <a href="javascript:;" data-type="quarter">季</a>
+                        <a href="javascript:;" data-type="month">月</a>
+                        <a href="javascript:;" data-type="week">周</a>
+                    </div>
+                    <div class="chart">
+                        <div class="label">单位:万</div>
+                        <div class="line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 车辆情况 -->
+            <div class="top panel">
+                <div class="inner">
+                    <div class="all">
+                        <h3>车辆总数</h3>
+                        <div class="ssr">
+                            <p style="color: #ffffff;font-size: 30px;line-height: 100px;text-align: center;">351</p>
+                        </div>
+                    </div>
+                    <div class="province">
+                        <h3>车辆情况</h3>
+                        <div class="data">
+                            <ul class="sup">
+                                <li>
+                                    <span>公司自有</span>
+                                    <span></span>
+                                </li>
+                                <li>
+                                    <span>员工自备</span>
+                                    <span></span>
+                                </li>
+                                <li>
+                                    <span>租聘</span>
+                                    <span></span>
+                                </li>
+                            </ul>
+                            <ul class="sub">
+                                <div class="nbplay">
+                                    <div class="nb">
+                                        <!-- <li><span>数据</span><span> 数据<s class="icon-up"></s></span></li> -->
+                                    </div>
+                                </div>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="https://www.jq22.com/jquery/echarts-4.2.1.min.js"></script>
+<script src="./js/api.js"></script>
+<script src="./js/index.js"></script>
+<script src="./js/china.js"></script>
+<!-- <script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                data: [
+                    {
+                        id: 0,
+                        imgSrc: "../public/滨江.png",
+                        name: "滨江",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 1,
+                        imgSrc: "../public/淳安.png",
+                        name: "淳安",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 2,
+                        imgSrc: "../public/富阳.png",
+                        name: "富阳",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 3,
+                        imgSrc: "../public/拱墅.png",
+                        name: "拱墅",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 4,
+                        imgSrc: "../public/建德.png",
+                        name: "淳安",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 5,
+                        imgSrc: "../public/江干.png",
+                        name: "江干",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 6,
+                        imgSrc: "../public/临安.png",
+                        name: "临安",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 7,
+                        imgSrc: "../public/上城.png",
+                        name: "上城",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 8,
+                        imgSrc: "../public/桐庐.png",
+                        name: "桐庐",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 9,
+                        imgSrc: "../public/西湖.png",
+                        name: "西湖",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 10,
+                        imgSrc: "../public/下城.png",
+                        name: "下城",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 11,
+                        imgSrc: "../public/萧山.png",
+                        name: "萧山",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    },
+                    {
+                        id: 12,
+                        imgSrc: "../public/余杭.png",
+                        name: "余杭",
+                        diangong: "",
+                        gongchen: "",
+                        dengg: "",
+                        gscl: "",
+                    }],
+            }
+        },
+        methods: {
+            sun() {
+                myAjax('http://www.cmtthz.com/DataV/v1', 'post',).then(res => {
+                    console.log(res)
+                    console.log(res.zhengshu[0].diang)
+                    var sj = 0
+                    this.data.forEach(item => {
+                        item.diangong = res.zhengshu[sj].diang
+                        item.gongchen = res.zhengshu[sj].engineer
+                        item.dengg = res.zhengshu[sj].dengg
+                        item.gscl = res.cheliang[0].data[sj].num
+                        sj += 1
+                        // console.log(res.cheliang[0].data[sj].num)
+                    })
+                })
+            }
+        },
+        created() {
+            this.sun();
+        }
+    })
+</script> -->
+
+<!-- <script src="./js/mymap.js"></script> -->
+
+</html>

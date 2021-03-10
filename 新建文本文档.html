@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- <script type="text/javascript" src="../js/circle_image.js"></script> -->
+
+</head>
+
+<body>
+
+    <!--轮播图-->
+    <div id="imageBack">
+        <img src="../images/1.png" id="testImage" style="width: 400px;">
+    </div>
+    <!--手动控制按钮-->
+    <!-- <div id="buttonBack">
+        <button id="last" style="width: 200px;height: 40px">上一个</button>
+        <button id="next" style="width: 200px;height: 40px">下一个</button>
+    </div> -->
+<script>
+    var currentImage = 1;   //从1开始
+        var imageCount = 13;     //图片总数
+
+        window.onload = function () {
+            //2秒后执行
+            setTimeout(selfChangeImage, 2000);
+        };
+
+        //自动循环
+        function selfChangeImage() {
+            if (currentImage < imageCount) {
+                currentImage++;
+            } else if (currentImage = imageCount) {
+                currentImage = 1;
+            }
+
+            var imageObj = document.getElementById("testImage");
+            imageObj.src = "../images/" + currentImage + ".png";
+
+            //2秒后执行
+            setTimeout(selfChangeImage, 2000);
+        }
+</script>
+</body>
+
+</html>
